@@ -1,0 +1,38 @@
+version: '3'
+services:
+  # local database
+  degen-api-db:
+    image: mongo:latest
+    volumes:
+      - degen-api_db_data:/data/db
+      - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=dev
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+      - MONGO_INITDB_DATABASE=degen
+    env_file:
+      - .env
+    networks:
+      - appnet
+
+  # For testing prod dockerfile
+  degen-api-prod:
+    build:
+      context: .
+      dockerfile: api.prod.dockerfile
+    container_name: degen-api-prod
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    networks:
+      - appnet
+
+networks:
+  appnet:
+    driver: bridge
+
+volumes:
+  degen-api_db_data:
