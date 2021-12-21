@@ -1,8 +1,8 @@
 import { DeleteResponseDTO } from '../../core/dtos/delete-response.dto';
-import { PoapAdminDTO } from './../models/poap-admin.model';
+import { PoapAdminModel } from './../models/poap-admin.model';
 import {
-  AddPoapAdminDTO,
-  DeletePoapAdminDTO,
+  AddPoapAdminRequestDTO,
+  DeletePoapAdminRequestDTO,
   PoapAdminsResponseDTO,
 } from '../dtos/poap-admin.dtos';
 import {
@@ -23,10 +23,10 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
   version: '1',
 })
 export class PoapAdminController {
-  constructor(private poapService: PoapAdminService) {}
+  constructor(private poapAdminService: PoapAdminService) {}
 
   @ApiOperation({
-    description: 'Get a list of all poap admins for the given guild',
+    description: 'Get a list of all POAP admins for the given guild',
   })
   @ApiResponse({ type: PoapAdminsResponseDTO })
   @Get(':guildId')
@@ -34,30 +34,30 @@ export class PoapAdminController {
     @Param('guildId') guildId: string
   ): Promise<PoapAdminsResponseDTO> {
     return {
-      poapAdmins: await this.poapService.getPoapAdmins(guildId),
+      poapAdmins: await this.poapAdminService.getPoapAdmins(guildId),
     };
   }
 
   @ApiOperation({
-    description: 'Add a poap admin for the given guild',
+    description: 'Add a POAP admin for the given guild',
   })
-  @ApiResponse({ type: PoapAdminDTO, isArray: true })
+  @ApiResponse({ type: PoapAdminModel, isArray: true })
   @Post()
-  async addAdmin(@Body() addPoapAdmin: AddPoapAdminDTO) {
+  async addAdmin(@Body() addPoapAdmin: AddPoapAdminRequestDTO) {
     const { guildId, userId } = addPoapAdmin;
-    return this.poapService.addPoapAdmin(guildId, userId);
+    return this.poapAdminService.addPoapAdmin(guildId, userId);
   }
 
   @ApiOperation({
-    description: 'Delete a poap admin for the given guild',
+    description: 'Delete a POAP admin for the given guild',
   })
   @ApiResponse({ type: DeleteResponseDTO })
   @Delete()
   async deleteAdmin(
-    @Body() deletePoapAdmin: DeletePoapAdminDTO
+    @Body() deletePoapAdmin: DeletePoapAdminRequestDTO
   ): Promise<DeleteResponseDTO> {
     const { _id } = deletePoapAdmin;
-    const result = await this.poapService.deletePoapAdmin(_id);
+    const result = await this.poapAdminService.deletePoapAdmin(_id);
     if (result?.deletedCount > 0) {
       return result;
     } else {

@@ -1,11 +1,7 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { PoapAdminDTO } from '../models/poap-admin.model';
+import { PoapAdminModel } from '../models/poap-admin.model';
 import { DiscordClientProvider } from '@discord-nestjs/core';
 import { Client } from 'discord.js';
 
@@ -14,8 +10,8 @@ export class PoapAdminService {
   client: Client;
 
   constructor(
-    @InjectModel(PoapAdminDTO)
-    private readonly poapAdminModel: ReturnModelType<typeof PoapAdminDTO>,
+    @InjectModel(PoapAdminModel)
+    private readonly poapAdminModel: ReturnModelType<typeof PoapAdminModel>,
     private readonly discordClientProvider: DiscordClientProvider
   ) {
     this.client = this.discordClientProvider.getClient();

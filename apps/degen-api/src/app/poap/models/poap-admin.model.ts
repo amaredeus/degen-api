@@ -4,14 +4,14 @@ import { IsString } from 'class-validator';
 import { BaseModel } from '../../core/models/base.model';
 
 @modelOptions({ schemaOptions: { collection: 'poapAdmins' } })
-export class PoapAdminDTO extends BaseModel {
+export class PoapAdminModel extends BaseModel {
   @IsString()
   @prop({ required: true })
   objectType: 'ROLE' | 'USER';
 
   @ApiProperty({
     description:
-      'Discord Id of the user that is configured to use this command.',
+      'Discord Id of the user that is configured to use this command',
   })
   @IsString()
   @prop({ required: true })
