@@ -45,7 +45,9 @@ export class LoggingInterceptor implements NestInterceptor {
 
     // Logs GraphQL Requests
     if (requestType === 'graphql') {
-      console.error('graphql logs not implemented yet...');
+      console.warn(
+        'GraphQL logs not implemented yet - this query was not logged...'
+      );
     }
 
     // Logs HTTP Requests
@@ -54,7 +56,10 @@ export class LoggingInterceptor implements NestInterceptor {
       const req = ctxHttp.getRequest<Request>();
       if (
         req &&
-        !this.anyUrlMatches(req.originalUrl || req.url, this.parsedIgnoreExpressions)
+        !this.anyUrlMatches(
+          req.originalUrl || req.url,
+          this.parsedIgnoreExpressions
+        )
       ) {
         this.logger.log(this.getHttpLog(ctxHttp, req), req.method);
       }
@@ -71,7 +76,9 @@ export class LoggingInterceptor implements NestInterceptor {
       path: req.originalUrl || req.url,
       client: {
         host:
-          req?.headers['x-forwarded-for'] || req?.ip || req?.connection?.remoteAddress,
+          req?.headers['x-forwarded-for'] ||
+          req?.ip ||
+          req?.connection?.remoteAddress,
         userAgent: req?.headers['user-agent'] || null,
       },
     };

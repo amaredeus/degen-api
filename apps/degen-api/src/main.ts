@@ -1,5 +1,5 @@
 import { LoggingInterceptor } from './app/core/interceptors/logging.interceptor';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';
 import { AppModule } from './app/app.module';
@@ -18,14 +18,15 @@ async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
-    {
-      logger: logger,
-    }
+    { logger: logger }
   );
   const { httpAdapter } = app.get(HttpAdapterHost);
 
   // App setup
   const globalPrefix = 'api';
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
   app.useGlobalInterceptors(
     new LoggingInterceptor(logger, {
       ignoreRoutes: [`${globalPrefix}/health`],

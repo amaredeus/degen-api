@@ -11,6 +11,7 @@
 
 ## System Requirements
 
+- [Docker](https://docs.docker.com/get-docker/)
 - [Node.js](https://nodejs.org/en/) >= 14.xx
 
 > If you are running this project on a windows machine you will need to install [make for windows](http://gnuwin32.sourceforge.net/packages/make.htm)

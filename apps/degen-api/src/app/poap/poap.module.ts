@@ -1,21 +1,12 @@
 import { TypegooseModule } from 'nestjs-typegoose';
 import { Module } from '@nestjs/common';
-import { PoapController } from './poap.controller';
+import { PoapAdminController } from './controllers/poap-admin.controller';
 import { PoapAdminDTO } from './models/poap-admin.model';
-import { PoapService } from './poap.service';
+import { PoapAdminService } from './services/poap-admin.service';
 
 @Module({
-  imports: [
-    TypegooseModule.forFeature([
-      {
-        typegooseClass: PoapAdminDTO,
-        schemaOptions: {
-          collection: 'poapAdmins',
-        },
-      },
-    ]),
-  ],
-  controllers: [PoapController],
-  providers: [PoapService],
+  imports: [TypegooseModule.forFeature([PoapAdminDTO])],
+  controllers: [PoapAdminController],
+  providers: [PoapAdminService],
 })
 export class PoapModule {}

@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from 'nestjs-typegoose';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { PoapAdminDTO } from './models/poap-admin.model';
+import { PoapAdminDTO } from '../models/poap-admin.model';
 import { DiscordClientProvider } from '@discord-nestjs/core';
 import { Client } from 'discord.js';
 
 @Injectable()
-export class PoapService {
+export class PoapAdminService {
   client: Client;
 
   constructor(
@@ -33,8 +37,14 @@ export class PoapService {
 
   /** Adds the given user as a poap admin for this guild */
   async addPoapAdmin(guildId: string, userId: string) {
-    const guild = await this.client.guilds.fetch(guildId);
-    const guildMember = await guild.members.fetch(userId);
+    const guild = await this.client.guilds.fetch(guildId).catch((e) => {
+      throw new NotFoundException(`Could not find guild with ID: ${guildId}`);
+    });
+    const guildMember = await guild.members.fetch(userId).catch((e) => {
+      throw new NotFoundException(
+        `Could not find guild member with ID: ${userId}`
+      );
+    });
     const poapAdmin = await this.poapAdminModel.create({
       objectType: '???',
       discordObjectId: userId,
