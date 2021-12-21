@@ -7,7 +7,7 @@ import { Client } from 'discord.js';
 
 @Injectable()
 export class PoapAdminService {
-  client: Client;
+  private client: Client;
 
   constructor(
     @InjectModel(PoapAdminModel)

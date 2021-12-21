@@ -10,11 +10,10 @@ import { PoapSettingsModel } from '../models/poap-settings.model';
 import { Client } from 'discord.js';
 import { DiscordClientProvider } from '@discord-nestjs/core';
 import { PoapEventResponseDTO } from '../dtos/poap-event.dtos';
-import { start } from 'repl';
 
 @Injectable()
 export class PoapEventService {
-  client: Client;
+  private client: Client;
 
   constructor(
     @InjectModel(PoapSettingsModel)
