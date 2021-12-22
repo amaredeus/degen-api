@@ -5,7 +5,7 @@
 - [System Requirements](#system-requirements)
 - [Starting the Project](#starting-the-project)
 - [API Documentation](#api-documentation)
-- [Creating a Test Bot](#creating-a-test-bot)
+- [API Architecture](#api-architecture)
 
 </br>
 
@@ -45,3 +45,9 @@ To start the project run: `make start`
 ## API documentation
 
 Once the project is running visit [`http://localhost:8080/api`](http://localhost:8080/api) to view the interactive swagger documentation.
+
+</br>
+
+## API architecture
+
+Next, review the [API Architecture and Style guidelines here](../architecture/degen-api-style.md).

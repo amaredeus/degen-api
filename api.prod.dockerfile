@@ -13,7 +13,7 @@ COPY package-lock.json package-lock.json
 COPY ./dist/apps/degen-api .
 
 ENV NODE_ENV=production
-ENV API_NEST_PORT=8080
+ENV API_PORT=8080
 EXPOSE 8080
 
 RUN npm ci --only=production --ignore-scripts --platform=linux

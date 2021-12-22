@@ -4,11 +4,13 @@
 
 This project is built with [NestJS](https://docs.nestjs.com/) using the [fastify](https://docs.nestjs.com/techniques/performance) adapter. The project is maintained as an [NX project](https://nx.dev/) and all dependency upgrades should be handled via [NX cli migrations](https://nx.dev/l/r/core-concepts/updating-nx). View the NX documentation on how to leverage it to execute operations like [serving](https://nx.dev/l/r/cli/serve), [linting](https://nx.dev/l/r/cli/lint), [testing](https://nx.dev/l/r/cli/test), [building](https://nx.dev/l/r/cli/build), and even [generating new code](https://nx.dev/l/r/nest/overview).
 
+If a pattern is not covered in this documentation, defer to default NestJS patterns first as outlined in the [NestJS documentation](https://docs.nestjs.com/).
+
 ## Table of Contents
 
 - [File and Module Structure](#file-and-module-structure)
 - [Logging](#logging)
-- [Database](#database)
+- [Database Models](#database-models)
 - [Service Abstraction Layer](#service-abstraction-layer)
 - [DTOs and Validation](#dtos-and-validation)
 - [Automatic Swagger Docs](#automatic-swagger-docs)
@@ -20,13 +22,13 @@ This project is built with [NestJS](https://docs.nestjs.com/) using the [fastify
 
 ### Modules
 
-NestJS includes a [module system](https://docs.nestjs.com/modules) that helps manage the dependency injection hierarchy in a modular fashion (if you are familiar with [Angular](https://angular.io/) modules and DI this is nearly identical). This API should only ever contain three types of modules the `CoreModule`, `SharedModules` and `FeatureModules`:
+NestJS includes a [module system](https://docs.nestjs.com/modules) that helps manage the dependency injection hierarchy in a modular fashion (if you are familiar with [Angular](https://angular.io/) modules and its DI this is nearly identical). This API should only ever contain three types of modules the `CoreModule`, shared modules, and feature modules:
 
 - The `CoreModule` is a root level [global module](https://docs.nestjs.com/modules#global-modules) that imports all app wide modules, services, and more. It also houses globally used singletons like utility functions, models, DTOs, and more.
 
-- A `FeatureModule` is the most common module. Each feature module should contain everything required for a given feature. If we are strict about this a feature can easily be spun off into its own microservice down the road if that is ever needed.
+- A "feature module" is the most common module. Each feature module should contain everything required for a given feature. If we are strict about this a feature can easily be spun off into its own microservice down the road if that is ever needed.
 
-- A `SharedModule` would be any module that could be imported in more than one module. This module should take care to not import any singletons and isolate scope to only where it is imported.
+- A "shared module" would be any module that could be imported in more than one module. This module should take care to not import any singletons and isolate scope to only where it is imported.
 
 ### File Naming Patterns
 
@@ -44,7 +46,7 @@ However, **_IF_** there is more than one of that "thing" they should be grouped 
 
 ## Logging
 
-Although this project uses Winston for logging, you **_always_** log information using the built in [NestJS `Logger`](https://docs.nestjs.com/techniques/logger). To use this interface you must import the `Logger` type and inject it where needed:
+Although this project uses Winston for logging, you should **_always_** log information using the built in [NestJS `Logger`](https://docs.nestjs.com/techniques/logger). To use this interface you **must** import the `Logger` type from `@nestjs/common` and inject it where needed:
 
 ```typescript
 import { Logger, Injectable } from '@nestjs/common';
@@ -59,7 +61,7 @@ class ExampleService {
 
 ### Winston & NestJS Integration
 
-This project leverages [winston](https://github.com/winstonjs/winston) for logging. Winston allows us to customize formatters and transports per environment so that locally logs can be pretty printed and written to the console while in upper level envs they can be JSON formatted and written to external services like LogDNA.
+This project leverages [winston](https://github.com/winstonjs/winston) for logging. Winston allows us to customize formatters and [transports](https://github.com/winstonjs/winston/blob/master/docs/transports.md#winston-core) per environment so that locally logs can be pretty printed and written to the console while in upper level envs they can be JSON formatted and written to external services like LogDNA.
 
 We integrate winston with NestJS via the [nest-winston](https://github.com/gremo/nest-winston) package. Nest-winston takes in a winston configuration and outputs a logger service that implements the NestJS logger service interface. We then pass this to NestJS at bootstrap time in the projects `main.ts` file for NestJS to use as the default logger everywhere. This means that when you inject the `Logger` you are actually getting a logger that will write logs according to the given winston configuration for the current env.
 
@@ -73,17 +75,19 @@ Be sure to throw a standard [NestJS exception](https://docs.nestjs.com/exception
 
 <br />
 
-## Database
+## Database Models
 
 ### Typegoose & NestJS Integration
 
 This project leverages [typegoose](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide) via [nestjs-typegoose](https://kpfromer.github.io/nestjs-typegoose/docs/usage). Typegoose allows us to specify types for mongo collections via Typescript classes with special decorators. Nestjs-typegoose allows us to [define these models as module dependencies](https://kpfromer.github.io/nestjs-typegoose/docs/usage#providing-the-model-for-our-services) to they can be [injected via NestJS DI](https://kpfromer.github.io/nestjs-typegoose/docs/usage#creating-the-service).
 
+Also, ensure you make proper use of typegoose decorator options to enforce required properties where applicable.
+
 ### Models
 
 Define mongo models following the proper file format: `{collection}.model.ts`. A model can also be decorated with class-validator decorators so it can be used as controller param/body inputs as well or extended via [mapped types](https://docs.nestjs.com/openapi/mapped-types) to declare request and response objects more easily.
 
-**Do not put business logic in models.** I repeat, do not put business logic in models. Fat Models/the Active Record pattern are bad patterns. They often lead to convoluted, hard to follow logic, hard to test operations, and confusion around where new logic belongs. Keep models dumb and use the only as type and validation definition sources.
+**Do not put business logic in models.** I repeat, do not put business logic in models. Fat Models/the Active Record pattern are, in practice, bad patterns. They often lead to convoluted, hard to follow logic, hard to test operations, and confusion around where new logic belongs. Keep models dumb and use them only as type and validation definition sources.
 
 <br />
 
@@ -93,7 +97,7 @@ Define mongo models following the proper file format: `{collection}.model.ts`. A
 
 > Why is this not redundant?
 
-Because services can be mocked extremely easily for unit and integration testing as needed. This also allows us to reuse business logic to expose something other than REST endpoints, like GraphQL queries and mutations, very very easily down the line if needed.
+Because services can be mocked extremely easily for unit and integration testing as needed. This also allows us to reuse business logic to expose something other than REST endpoints, like GraphQL queries and mutations, very very easily down the line if needed. NestJS' robust DI system makes leveraging & reusing services anywhere cake.
 
 <br />
 
@@ -120,7 +124,7 @@ Be sure to properly decorate DTOs and Controllers with the correct metadata info
 
 ## Discord Integration
 
-This project connects to discord via [discord.js](https://discord.js.org/) via the [`@discord-nestjs/core`](https://github.com/fjodor-rybakov/discord-nestjs) module. This module configures a discord.js client for us and provides it as a service we can inject via DI anywhere in the project. This module is configured in the `CoreModule` so it can be used globally like so:
+This project connects to discord with [discord.js](https://discord.js.org/) via the [`@discord-nestjs/core`](https://github.com/fjodor-rybakov/discord-nestjs) module. This module configures a discord.js client for us and provides it as a service we can inject via DI anywhere in the project. This module is configured in the `CoreModule` so it can be used globally like so:
 
 ```typescript
 import { Client } from 'discord.js';
