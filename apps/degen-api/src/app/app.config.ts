@@ -7,7 +7,7 @@ import { IsNumber, IsString, validateSync } from 'class-validator';
  */
 export class GlobalAppConfig {
   @IsNumber()
-  API_PORT: string;
+  API_PORT: number;
 
   @IsString()
   DISCORD_CLIENT_ID: string;

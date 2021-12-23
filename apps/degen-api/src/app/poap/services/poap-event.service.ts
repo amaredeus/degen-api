@@ -36,15 +36,13 @@ export class PoapEventService {
 
     // Return events with active members in channel
     return Promise.all(
-      result.map(async (event: PoapSettingsModel) => {
-        return {
-          ...event,
-          participants: await this.getParticipants(
-            event?.discordServerId,
-            event?.voiceChannelId
-          ),
-        };
-      })
+      result.map(async (event: PoapSettingsModel) => ({
+        ...event,
+        participants: await this.getParticipants(
+          event?.discordServerId,
+          event?.voiceChannelId
+        ),
+      }))
     );
   }
 
@@ -121,7 +119,7 @@ export class PoapEventService {
           discordServerId: discordServerId,
           durationInMinutes: 0,
         };
-        this.addParticipant(participant, event);
+        return this.addParticipant(participant, event);
       })
     );
   }
