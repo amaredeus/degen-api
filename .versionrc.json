@@ -1,0 +1,40 @@
+{
+  "types": [
+    {
+      "type": "build",
+      "section": "Other"
+    },
+    {
+      "type": "chore",
+      "hidden": true
+    },
+    {
+      "type": "ci",
+      "section": "Other"
+    },
+    {
+      "type": "docs",
+      "section": "Other"
+    },
+    {
+      "type": "feat",
+      "section": "Features"
+    },
+    {
+      "type": "fix",
+      "section": "Bug Fixes"
+    },
+    {
+      "type": "perf",
+      "section": "Performance Improvements"
+    },
+    {
+      "type": "refactor",
+      "section": "Other"
+    },
+    {
+      "type": "test",
+      "section": "Other"
+    }
+  ]
+}
