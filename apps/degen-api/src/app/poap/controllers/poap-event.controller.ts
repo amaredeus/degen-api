@@ -8,15 +8,24 @@ import {
   Param,
   Post,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   PoapEventEndRequestDTO,
   PoapEventStartRequestDTO,
 } from '../dtos/poap-event.dtos';
 import { SuccessResponseDTO } from '../../core/dtos/success-response.dto';
+import { ApiKeyGuard } from '../../core/guards/apikey.guard';
 
 @ApiTags('POAP Event')
+@ApiSecurity('apiKey')
+@UseGuards(ApiKeyGuard)
 @Controller({
   path: 'poap/event',
   version: '1',

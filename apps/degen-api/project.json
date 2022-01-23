@@ -29,7 +29,8 @@
     "serve": {
       "executor": "@nrwl/node:execute",
       "options": {
-        "buildTarget": "degen-api:build"
+        "buildTarget": "degen-api:build",
+        "port": 7777
       }
     },
     "lint": {

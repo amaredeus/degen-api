@@ -1,3 +1,4 @@
+import { ApiKeyGuard } from './../../core/guards/apikey.guard';
 import { DeleteResponseDTO } from '../../core/dtos/delete-response.dto';
 import { PoapAdminModel } from './../models/poap-admin.model';
 import {
@@ -13,11 +14,19 @@ import {
   NotFoundException,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { PoapAdminService } from '../services/poap-admin.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('POAP Admin')
+@ApiSecurity('apiKey')
+@UseGuards(ApiKeyGuard)
 @Controller({
   path: 'poap/admin',
   version: '1',
