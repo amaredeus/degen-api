@@ -41,6 +41,7 @@ async function bootstrap() {
     .setTitle('Degen-API')
     .setDescription('Core DEGEN API')
     .setVersion('1.0')
+    .addApiKey({ type: 'apiKey', in: 'header', name: 'X-API-KEY' }, 'apiKey')
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup(globalPrefix, app, document);

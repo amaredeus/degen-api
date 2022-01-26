@@ -74,6 +74,7 @@ export class LoggingInterceptor implements NestInterceptor {
       message: `[Request] ${req.method}: ${req.originalUrl || req.url}`,
       context: req.method,
       path: req.originalUrl || req.url,
+      apiKeyId: req.apiKeyId,
       client: {
         host:
           req?.headers['x-forwarded-for'] ||

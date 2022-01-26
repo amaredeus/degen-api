@@ -32,6 +32,12 @@ To set up and install all project level dependencies run: `make install`
 
 To run this project you need a mongodb env setup. The `make install` command will create a starter `.env` file for you and the `make start` command below will initialize a local docker instance of mongo for you, but you can configure env vars to connect to a remote mongo instance instead.
 
+### API Key Generation
+
+Most requests require a valid `X-API-KEY` header value. To generate one for local development run `npm run gen-apikey` and follow the prompt. The secret value you input when asked by this script should match the `JWT_SECRET` environment variable in your `.env` file.
+
+Use the generated API key in swagger with the `AUTHORIZE` button near the top right of the page.
+
 ### Environment variables
 
 You will not be able to run the project without the required variables. If you run the project via `make start` as described below it will log which required env variables are missing. Be sure to acquire these values from the team and add them to the `.env` file at the root of the project.

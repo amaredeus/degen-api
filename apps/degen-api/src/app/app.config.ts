@@ -24,6 +24,9 @@ export class GlobalAppConfig {
   @IsString()
   MONGODB_DB: string;
 
+  @IsString()
+  JWT_SECRET: string;
+
   constructor(config: any) {
     Object.assign(this, config);
     const errors = validateSync(this);
@@ -55,6 +58,7 @@ const config = {
   DISCORD_TOKEN: process.env.DISCORD_TOKEN,
   MONGODB_URI: process.env.MONGODB_URI,
   MONGODB_DB: process.env.MONGODB_DB ?? 'degen',
+  JWT_SECRET: process.env.JWT_SECRET,
 };
 
 const testConfig = {};
