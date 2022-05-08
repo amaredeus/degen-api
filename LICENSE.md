@@ -7,12 +7,12 @@ License text copyright (c) 2017 MariaDB Corporation Ab, All Rights Reserved.
 
 Parameters
 
-Licensor:             BanklessDAO | DEGEN Workgroup
+Licensor:             Solid Chain Technologies, LLC
 
-Licensed Work:        DEGEN
-                      The Licensed Work is (c) 2021 BanklessDAO | DEGEN Workgroup
+Licensed Work:        DEGEN API
+                      The Licensed Work is (c) 2022 Solid Chain Technologies, LLC
 
-Change Date:          The earliest of 2023-12-16
+Change Date:          The earliest of 2025-01-10
 
 Change License:       GNU General Public License v3.0 or later
 
